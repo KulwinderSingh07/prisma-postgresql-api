@@ -9,3 +9,34 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User{
+  id String @id @default(uuid())
+  name String?
+  email String @unique
+  password String
+  posts Post[]
+}
+
+model Post{
+  id String @id @default(uuid())
+  author User @relation(fields: [authorId],references: [id])
+  authorId String
+  title String
+  body String
+  Publisher publisher @default(Arihant)
+  category Category[]
+  createdAt DateTime @default(now())
+}
+
+model Category{
+  id String @id @default(uuid())
+  name String  @unique
+  post Post[]
+}
+
+enum publisher{
+  Oxford
+  BBC
+  Arihant
+}
