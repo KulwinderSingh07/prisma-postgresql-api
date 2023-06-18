@@ -55,4 +55,25 @@ const userDetailUpdate=async(req,res)=>{
     res.send(err.message)
 }
 }
-export {signup,signin,userDetailUpdate}
+const getspecificuser=async(req,res)=>{
+    try{
+        const token=req.cookies.loged
+        const decodedToken=Jwt.verify(token,jwt_key)
+        const user=await prisma.user.findUnique({
+            where:{
+                id:decodedToken.payload
+            },
+            select:{
+                posts:true,
+                name:true,
+                email:true,
+                id:true
+            }
+        })
+        console.log(user)
+        res.send(user)
+    }catch(err){
+        res.send(err.message)
+    }
+}
+export {signup,signin,userDetailUpdate,getspecificuser}
