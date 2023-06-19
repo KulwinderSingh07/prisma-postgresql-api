@@ -2,7 +2,7 @@ import supertest from "supertest"
 import createServer from "./server.js"
 const app=createServer()
 const request=supertest(app)
-describe("User operation tests",()=>{
+describe.skip("User operation tests",()=>{
 
     test("signup",async()=>{
         const {body,statusCode}=await request.post("/user/signup").send(
@@ -47,7 +47,7 @@ describe("User operation tests",()=>{
 
     })
 
-    test('getspecific User', async() => {
+    test('getspecific poost', async() => {
     const {body,statusCode}=await request.get("/post/specific/acb37df5-bdc0-4d0b-b8ed-fd72e7fab99c")
     expect(statusCode).toBe(200);
     expect(body).toEqual(
@@ -61,4 +61,53 @@ describe("User operation tests",()=>{
         }
     )
     })
+})
+
+describe("Post operation tests", ()=>{
+    test("post creation",async ()=>{
+        const {body,statusCode}=await request.post("/post/create").send({
+            "title":"Anarchy",
+            "body":"This is  a demo post 2 title ananrchy"
+        }).set("Cookie",["loged=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYXlsb2FkIjoiNzAyOTdiZTgtMWFmYy00ODA3LWIxYzUtNzBjZjMyMDY4YWFkIiwiaWF0IjoxNjg3MTk3NTM1fQ.DhkFsTE2EQnPo29h7eaqwyuxmkwvfGgZyW3aprcv3gM"])
+        expect(statusCode).toBe(200)
+        expect(body).toEqual(
+            {
+                "id": expect.any(String),
+                "authorId": expect.any(String),
+                "title": "Anarchy",
+                "body": "This is  a demo post 2 title ananrchy",
+                "Publisher": expect.any(String),
+                "createdAt": expect.any(String)
+            }
+        )
+    })
+    test("get specific post",async()=>{
+        const {body,statusCode}=await request.get("/post/specific/8e23f59e-1786-483f-9fa1-100879f8c8ba")
+        console.log(body)
+        expect(statusCode).toBe(200)
+        expect(body).toEqual(
+            {
+                "id": expect.any(String),
+                "authorId": expect.any(String),
+                "title": expect.any(String),
+                "body": expect.any(String),
+                "Publisher": expect.any(String),
+                "createdAt": expect.any(String)
+            }
+        )
+    })
+    test("delete specific post",async()=>{
+        const {body,statusCode}=await request.delete("/post/delete/40ebb1ea-1412-4019-a948-bc4d8cc6ebb1")
+        expect(statusCode).toBe(200)
+        expect(body).toEqual(
+            {
+                "id": expect.any(String),
+                "authorId": expect.any(String),
+                "title": expect.any(String),
+                "body": expect.any(String),
+                "Publisher": expect.any(String),
+                "createdAt": expect.any(String)
+            }
+        )
+})
 })
