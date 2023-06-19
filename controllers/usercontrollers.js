@@ -50,7 +50,9 @@ const userDetailUpdate=async(req,res)=>{
         data:req.body
     })
     console.log(updateUser)
-    res.send("updated")
+    res.send({
+        message:"updated"
+    })
 }catch(err){
     res.send(err.message)
 }
